@@ -11,9 +11,11 @@ import {
   Box,
   Typography,
   Chip,
+  Button,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { getMiningPools } from "../api/miningPoolsApi";
+import { getMiningPools, getMiningPoolDetails } from "../api/miningPoolsApi";
+import PoolDetailsModal from "./PoolDetailsModal";
 
 const STATUS_COLORS = {
   online: "success",
@@ -21,16 +23,14 @@ const STATUS_COLORS = {
   offline: "error",
 };
 
-/**
- * MiningPoolTable component fetches and displays mining pool data in a table.
- *
- * @component
- * @returns {JSX.Element} A Material UI table listing mining pools.
- */
 const MiningPoolTable = () => {
   const [pools, setPools] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [selectedPool, setSelectedPool] = useState(null);
+  const [details, setDetails] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const theme = useTheme();
 
@@ -39,21 +39,6 @@ const MiningPoolTable = () => {
     color: theme.custom.tableHeaderText,
     fontWeight: 600,
   };
-
-  useEffect(() => {
-    const fetchPools = async () => {
-      try {
-        const data = await getMiningPools();
-        setPools(data);
-      } catch (err) {
-        setError(err.response?.data?.message || err.message || "Unknown error");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPools();
-  }, []);
 
   const columns = [
     { label: "Name", key: "name" },
@@ -76,7 +61,51 @@ const MiningPoolTable = () => {
         />
       ),
     },
+    {
+      label: "Details",
+      key: "details",
+      render: (_, row) => (
+        <Button
+          variant="outlined"
+          size="small"
+          onClick={() => handleOpenDetails(row)}
+        >
+          Details
+        </Button>
+      ),
+    },
   ];
+
+  useEffect(() => {
+    const fetchPools = async () => {
+      try {
+        const data = await getMiningPools();
+        setPools(data);
+      } catch (err) {
+        setError(err.response?.data?.message || err.message || "Unknown error");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPools();
+  }, []);
+
+  const handleOpenDetails = async (pool) => {
+    setSelectedPool(pool);
+    try {
+      const detailData = await getMiningPoolDetails(pool.id);
+      setDetails(detailData);
+      setModalOpen(true);
+    } catch (error) {
+      console.error("Failed to fetch pool details:", error);
+    }
+  };
+
+  const handleCloseDetails = () => {
+    setModalOpen(false);
+    setDetails(null);
+  };
 
   if (loading) {
     return (
@@ -133,6 +162,12 @@ const MiningPoolTable = () => {
           ))}
         </TableBody>
       </Table>
+      <PoolDetailsModal
+        open={modalOpen}
+        onClose={handleCloseDetails}
+        pool={selectedPool}
+        details={details}
+      />
     </TableContainer>
   );
 };
