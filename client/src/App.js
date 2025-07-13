@@ -1,8 +1,9 @@
 import React, { useMemo, useState } from "react";
 import { ThemeProvider, CssBaseline } from "@mui/material";
-import { getTheme } from "./theme";
+import { getTheme } from "./theme/theme";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
+import ScrollStyles from './theme/ScrollStyles';
 
 function App() {
   const [mode, setMode] = useState("light");
@@ -15,6 +16,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <ScrollStyles mode={mode} />
       <Navbar mode={mode} toggleTheme={toggleTheme} />
       <Home />
     </ThemeProvider>

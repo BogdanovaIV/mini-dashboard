@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from "@mui/material/styles";
 
 /**
  * Returns a Material UI theme configuration based on the specified mode.
@@ -17,18 +17,22 @@ export const getTheme = (mode) =>
   createTheme({
     palette: {
       mode,
-      ...(mode === 'light'
+      ...(mode === "light"
         ? {
             background: {
-              default: '#f2f2f2',
-              paper: '#fff',
+              default: "#f2f2f2",
+              paper: "#fff",
             },
           }
         : {
             background: {
-              default: '#121212',
-              paper: '#1e1e1e',
+              default: "#121212",
+              paper: "#1e1e1e",
             },
           }),
+    },
+    custom: {
+      tableHeaderBackground: mode === "light" ? "#e0e0e0" : "#1a1a1a",
+      tableHeaderText: mode === "light" ? "#2c2c2c" : "#f5f5f5",
     },
   });
