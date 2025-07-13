@@ -1,10 +1,11 @@
-import React from 'react';
+import { Container } from "@mui/material";
+import React from "react";
 
 function Home() {
   return (
-    <div>
+    <Container sx={{ mt: 4 }}>
       Home page
-    </div>
+    </Container>
   );
 }
 
