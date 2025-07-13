@@ -125,7 +125,10 @@ const MiningPoolTable = () => {
       setDetails(detailData);
       setModalOpen(true);
     } catch (error) {
-      console.error("Failed to fetch pool details:", error);
+      setModalOpen(true);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Failed to fetch pool details:", error);
+      }
     }
   };
 
@@ -184,7 +187,7 @@ const MiningPoolTable = () => {
           marginBottom: 2,
           width: "100%",
           overflowX: "auto",
-          maxHeight: `calc(100vh - 120px)`,
+          maxHeight: `calc(100vh - 160px)`,
         }}
       >
         <Table
