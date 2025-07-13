@@ -6,7 +6,6 @@ const pools = [
     activeWorkers: 1240,
     rejectRate: 0.012,
     status: 'online',
-    details: { last24hRevenueBTC: 0.035, uptimePercent: 99.82, location: 'Ashburn, VA', feePercent: 1.0 },
   },
   {
     id: 'pool-2',
